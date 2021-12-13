@@ -22,7 +22,14 @@ import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import BoardClientHistory from "./components/BoardClientHistory";
 
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import authHeader from "./services/auth-header";
+
 const App = () => {
+
+
+
   const [showDeviceBoard, setShowDeviceBoard] = useState(false);
   const [showUserBoard, setShowUserBoard] = useState(false);
   const [showMeasurementBoard, setShowMeasurementBoard] = useState(false);
@@ -41,6 +48,23 @@ const App = () => {
   const logOut = useCallback(() => {
     dispatch(logout());
   }, [dispatch]);
+
+  useEffect(() => {
+    var sock = new SockJS('https://ds2021-energy-daniel-backend.herokuapp.com/ws-message');
+    let stompClient = Stomp.over(sock);
+  
+    // sock.onopen = function() {
+    //   console.log('open');
+    // }
+
+    stompClient.connect({headers: authHeader()}, function(frame) {
+      console.log('Connected: ' + frame);
+      console.log(currentUser.username);
+      stompClient.subscribe("/topic/" + currentUser.username, function(error) {
+        alert(error.body);
+      });
+    });
+  },[]);
 
   useEffect(() => {
     if (currentUser) {

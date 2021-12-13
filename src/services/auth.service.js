@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "https://ds2021-energy-daniel-backend.herokuapp.com/api/auth/";
+const API_URL_LOCAL = "http://localhost:8080/api/auth/";
 
 // possible need to add the other fields
 const register = (fullName, username, password, birthday, address) => {
