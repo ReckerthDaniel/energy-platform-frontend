@@ -50,29 +50,22 @@ const App = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    var sock = new SockJS('https://ds2021-energy-daniel-backend.herokuapp.com/ws-message');
-    let stompClient = Stomp.over(sock);
-  
-    // sock.onopen = function() {
-    //   console.log('open');
-    // }
-
-    stompClient.connect({headers: authHeader()}, function(frame) {
-      console.log('Connected: ' + frame);
-      console.log(currentUser.username);
-      stompClient.subscribe("/topic/" + currentUser.username, function(error) {
-        alert(error.body);
-      });
-    });
-  },[]);
-
-  useEffect(() => {
     if (currentUser) {
       setShowDeviceBoard(currentUser.role.includes("ADMIN"));
       setShowUserBoard(currentUser.role.includes("ADMIN"));
       setShowMeasurementBoard(currentUser.role.includes("ADMIN"));
       setShowClientDeviceBoard(currentUser.role.includes("CLIENT"));
       setShowClientHistory(currentUser.role.includes("CLIENT"));
+
+      var sock = new SockJS('https://ds2021-energy-daniel-backend.herokuapp.com/ws-message');
+      let stompClient = Stomp.over(sock);
+
+      stompClient.connect({headers: authHeader()}, function(frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe("/topic/" + currentUser.username, function(error) {
+          alert(error.body);
+        });
+      });
 
     } else {
       setShowDeviceBoard(false);
