@@ -13,6 +13,7 @@ import BoardUser from "./components/BoardUser";
 import BoardDevice from "./components/BoardDevice";
 import BoardMeasurement from "./components/BoardMeasurement";
 import BoardClientDevice from "./components/BoardClientDevice";
+import HistoricalEC from "./components/HistoricalEC";
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
@@ -26,10 +27,10 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import authHeader from "./services/auth-header";
 
+const API_URL = "https://ds2021-energy-daniel-backend.herokuapp.com/";
+//const API_URL = "http://localhost:8080/api/";
+
 const App = () => {
-
-
-
   const [showDeviceBoard, setShowDeviceBoard] = useState(false);
   const [showUserBoard, setShowUserBoard] = useState(false);
   const [showMeasurementBoard, setShowMeasurementBoard] = useState(false);
@@ -57,7 +58,7 @@ const App = () => {
       setShowClientDeviceBoard(currentUser.role.includes("CLIENT"));
       setShowClientHistory(currentUser.role.includes("CLIENT"));
 
-      var sock = new SockJS('https://ds2021-energy-daniel-backend.herokuapp.com/ws-message');
+      var sock = new SockJS(API_RUL + 'ws-message');
       let stompClient = Stomp.over(sock);
 
       stompClient.connect({headers: authHeader()}, function(frame) {
@@ -181,6 +182,7 @@ const App = () => {
             <Route path="/devices/:id" component={BoardClientDevice}/>
             <Route path="/device/measurements/:id" component={BoardClientDevice}/>
             <Route path="/history/:id" component={BoardClientHistory}/>
+            <Route path="/historical-ec/:id" component={HistoricalEC}/>
           </Switch>
         </div>
 

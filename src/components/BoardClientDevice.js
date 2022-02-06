@@ -19,6 +19,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import UserService from "../services/user.service";
+import ShowChartIcon from '@material-ui/icons/ShowChart';
+import {useHistory} from "react-router-dom";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -41,6 +43,8 @@ const tableIcons = {
 };
 
 const BoardClientDevice = props => {
+  const history = useHistory();
+
   var columns = [
     {title: "Id", field: "id", hidden: true},
     {title: "Device Description", field: "deviceDescription", cellStyle: {width: 20, maxWidth: 50}, headerStyle: {width: 50, maxWidth: 50}},
@@ -99,6 +103,16 @@ const BoardClientDevice = props => {
               data={currentUser}
               icons={tableIcons}
               onRowClick={(event, rowData) => {getCurrentDeviceMeasurements(rowData.id)}}
+              actions={[
+                {
+                  icon: ()=> <ShowChartIcon/>,
+                  tooltip: 'Chart',
+                  onClick: (event, rowData) => {
+                    let path = `/historical-ec/${rowData.id}`;
+                    history.push(path);
+                  }
+                }
+              ]}
               detailPanel={(rowData) => {
                 return (
                   <MaterialTable
