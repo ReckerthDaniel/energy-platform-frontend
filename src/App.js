@@ -58,7 +58,7 @@ const App = () => {
       setShowClientDeviceBoard(currentUser.role.includes("CLIENT"));
       setShowClientHistory(currentUser.role.includes("CLIENT"));
 
-      var sock = new SockJS(API_RUL + 'ws-message');
+      var sock = new SockJS(API_URL + 'ws-message');
       let stompClient = Stomp.over(sock);
 
       stompClient.connect({headers: authHeader()}, function(frame) {
